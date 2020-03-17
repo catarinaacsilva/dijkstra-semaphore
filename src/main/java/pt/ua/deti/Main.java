@@ -8,7 +8,7 @@ import java.util.Queue;
  * The main execution program.
  * <p>
  * It implements a basic Producer/Consumer problem.<br>
- * The user input a setence, which is splitted into tokens.<br>
+ * The user input a sentence, which is splitted into tokens.<br>
  * Then the tokens are shared between the {@link Producer} and {@link Consumer}.
  * 
  * @see <a href=
@@ -33,7 +33,7 @@ public class Main {
             // if console is not null
             if (console != null) {
                 // read line from the user input
-                final String inputString = console.readLine("Setence: ");
+                final String inputString = console.readLine("Sentence: ");
                 if (inputString.length() > 0) {
                     txt = inputString;
                 }

@@ -21,9 +21,9 @@ mvn clean compile exec:java
 
 After that, the program will follow the next steps:
 
-1. The program asks for a setence
-2. Write any setence (e.g. How much wood would a woodchuck chuck if a woodchuck could chuck wood?)
-3. The producer will split the setence into tokens and insert them into a queue
+1. The program asks for a sentence
+2. Write any sentence (e.g. How much wood would a woodchuck chuck if a woodchuck could chuck wood?)
+3. The producer will split the sentence into tokens and insert them into a queue
 4. At the same time de consumer will consume de tokens and print them
 5. The tokens will be written in the terminal with the same order
 
