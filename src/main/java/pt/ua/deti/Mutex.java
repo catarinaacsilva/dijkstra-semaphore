@@ -14,7 +14,8 @@ public interface Mutex {
      * If the lock is not available then the current thread becomes disabled for thread scheduling 
      * purposes and lies dormant until the lock has been acquired.
      */
-    public void lock() throws InterruptedException;
+    public void lock();
+    
     /**
      * Releases the lock.
      */

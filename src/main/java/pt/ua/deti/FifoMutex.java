@@ -6,7 +6,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.LockSupport;
 
 /**
+ * Basic implementation of a {@link Mutex}.
+ * <p>
+ * It uses a {@link Queue} to store the waiting {@link Thread} in order, 
+ * and an {@link AtomicBoolean} to implement mutual exclusion.
+ * It also uses the {@link LockSupport} class to park (suspend) and unpark (resume) a thread.
  * 
+ * @author Catarina Silva
+ * @version 1.0
  */
 class FifoMutex implements Mutex {
   private final AtomicBoolean locked = new AtomicBoolean(false);
@@ -15,12 +22,13 @@ class FifoMutex implements Mutex {
   @Override
   public final void lock() {
     boolean wasInterrupted = false;
+    Thread t = Thread.currentThread();
     // publish current thread for unparkers
-    waiters.add(Thread.currentThread());
+    waiters.add(t);
 
     // Block while not first in queue or cannot acquire lock
-    while (waiters.peek() != Thread.currentThread() || !locked.compareAndSet(false, true)) {
-      LockSupport.park(this);
+    while (waiters.peek() != t || !locked.compareAndSet(false, true)) {
+      LockSupport.park(t);
       // ignore interrupts while waiting
       if (Thread.interrupted())
         wasInterrupted = true;
@@ -29,7 +37,7 @@ class FifoMutex implements Mutex {
     waiters.remove();
     // ensure correct interrupt status on return
     if (wasInterrupted)
-      Thread.currentThread().interrupt();
+      t.interrupt();
   }
 
   @Override
@@ -38,8 +46,8 @@ class FifoMutex implements Mutex {
     LockSupport.unpark(waiters.peek());
   }
 
-  static {
-    // Reduce the risk of "lost unpark" due to classloading
-    Class<?> ensureLoaded = LockSupport.class;
-  }
+  /**
+   * Reduces the risk of "lost unpark" due to classloading
+   */
+  static { Class<?> ensureLoaded = LockSupport.class; }
 }
