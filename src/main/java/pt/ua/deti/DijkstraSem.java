@@ -55,7 +55,7 @@ public class DijkstraSem implements Semaphore {
     }
 
     @Override
-    public synchronized void up() {
+    public void up() {
         lock.lock();
         value += 1;
         if (value <= 0) {
